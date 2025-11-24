@@ -1,0 +1,37 @@
+{
+  "name": "image-slider",
+  "version": "1.0.0",
+  "main": "index.js",
+ "scripts": {
+  "start": "webpack serve --mode development",
+  "build": "webpack --mode production"
+  },
+  "keywords": [
+    "interactives",
+		"widget",
+		"react",
+    "image-slider"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "style-loader": "^4.0.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.103.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  },
+  "babel": {
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+}
