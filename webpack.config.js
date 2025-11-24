@@ -40,6 +40,6 @@ module.exports = {
     static: "./dist",
     hot: true,
     open: true,
-    port: 3000,
+    port: 4000,
   },
 };
