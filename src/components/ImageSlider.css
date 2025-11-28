@@ -1,0 +1,86 @@
+/* Container */
+.slider-container {
+  position: relative;
+  width: 90%;
+  padding: 20px;
+  max-width: 600px;
+  margin: 40px auto;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.slider-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 600px; /* or whatever height you want */
+  overflow: hidden;
+}
+
+.slider-image {
+  position: absolute; /* stack images */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* hide all images initially */
+  transition: opacity 0.5s ease-in-out;
+  object-fit: cover; /* keep image aspect ratio */
+}
+
+.slider-image.active {
+  opacity: 1; /* show only the active image */
+}
+
+
+/* Navigation wrapper */
+.navigation-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Dots */
+.dots-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+/* Arrow buttons */
+.prev-btn,
+.next-btn {
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.prev-btn:hover,
+.next-btn:hover {
+  background-color: rgba(0,0,0,0.8);
+  transform: scale(1.1);
+}
+
+/* Dots active state */
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.dot.active {
+  background-color: #333;
+}
+
+.dot:hover {
+  transform: scale(1.2);
+}

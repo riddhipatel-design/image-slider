@@ -1,0 +1,73 @@
+.before-after-container {
+  width: 600px;
+  height: 400px;
+  position: relative;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+/* Left image (grows as handle moves right) */
+.before-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  transition: width 0.2s ease;
+}
+
+/* Right image (shrinks as handle moves right) */
+.after-img {
+  position: absolute;
+  top: 0;
+  right: 0; /* anchor to right edge */
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: width 0.2s ease;
+}
+
+.slider-handle {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 3;
+}
+
+/* Vertical line */
+.slider-line {
+  height: 100%;
+  background-color: #fff;
+  position: relative;
+  z-index: 2;
+}
+
+/* Handle circle */
+.handle {
+  position: absolute;     /* sit above the line */
+  top: 50%;               /* center vertically */
+  left: 50%;              /* center horizontally */
+  transform: translate(-50%, -50%); /* truly center on line */
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 4;
+  pointer-events: all;
+}
+/* existing rules you had... */
+
+.before-after-container.dragging .before-img,
+.before-after-container.dragging .after-img {
+  transition: none !important; /* images update instantly while dragging */
+}
+
+/* you can keep a smooth transition when not dragging:
+.before-img,
+.after-img {
+  transition: width 0.18s ease;
+}
+*/

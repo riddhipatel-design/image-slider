@@ -1,10 +1,19 @@
 import React from "react";
+import ImageSlider from "./components/ImageSlider";
+import BeforeAfterSlider from "./components/BeforeAfterSlider";
 
-export default function App() {
+function App() {
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Hello — Image Slider Learning</h1>
-      <p>Step 1: basic React render is working.</p>
+    <div>
+     <h1>Image Slider</h1>
+      <ImageSlider />
+
+      <h2>Before / After</h2>
+      <BeforeAfterSlider />
     </div>
   );
 }
+
+
+
+export default App;

@@ -23,6 +23,10 @@ module.exports = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset/resource",
+      },
     ],
   },
 
@@ -40,6 +44,6 @@ module.exports = {
     static: "./dist",
     hot: true,
     open: true,
-    port: 4000,
+    port: 3000,
   },
 };
