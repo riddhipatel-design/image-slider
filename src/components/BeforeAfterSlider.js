@@ -5,85 +5,72 @@ import fall from "../assets/fall.jpg";
 
 export default function BeforeAfterSlider() {
   const containerRef = useRef(null);
- const dragAnimationRef = useRef(null); // rafRef is a React ref that stores a value which does not reset on re-render.
+  const dragAnimationRef = useRef(null); // rafRef is a React ref that stores a value which does not reset on re-render.
   const [isDragging, setIsDragging] = useState(false);
   const [sliderPosition, setSliderPosition] = useState(50); // percentage 0..100
 
   // Clean up RAF on unmount
- useEffect(() => {
-  return () => {
-    if (dragAnimationRef.current) {
-      cancelAnimationFrame(dragAnimationRef.current);
-    }
-  };
-}, []);
-
+  useEffect(() => {
+    return () => {
+      if (dragAnimationRef.current) {
+        cancelAnimationFrame(dragAnimationRef.current);
+      }
+    };
+  }, []);
 
   // Mouse move handler attached to document for robust dragging
   useEffect(() => {
-    function moveSlider(e) {
-      if (!isDragging) return;
+    function updatePosition(clientX) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const relativeX = clientX - rect.left;
 
-      // Read fresh measurements each move so layout/resize won't break mapping
-      const dimensions = containerRef.current.getBoundingClientRect();
-      const relativeX = e.clientX - dimensions.left;
-      let percent = (relativeX / dimensions.width) * 100;
+      let percent = (relativeX / rect.width) * 100;
       percent = Math.max(0, Math.min(100, percent));
 
-      // throttle updates to animation frames
-     if (dragAnimationRef.current) {
-  cancelAnimationFrame(dragAnimationRef.current);
-}
+      if (dragAnimationRef.current)
+        cancelAnimationFrame(dragAnimationRef.current);
 
-dragAnimationRef.current = requestAnimationFrame(() => {
-  setSliderPosition(percent);
-});
+      dragAnimationRef.current = requestAnimationFrame(() => {
+        setSliderPosition(percent);
+      });
+    }
 
+    function moveMouse(e) {
+      if (!isDragging) return;
+      updatePosition(e.clientX);
+    }
+
+    function moveTouch(e) {
+      if (!isDragging) return;
+      updatePosition(e.touches[0].clientX);
     }
 
     function stopDrag() {
-      if (isDragging) {
-        setIsDragging(false);
-      }
+      if (!isDragging) return;
+      setIsDragging(false);
     }
 
-    document.addEventListener("mousemove", moveSlider);
+    document.addEventListener("mousemove", moveMouse);
     document.addEventListener("mouseup", stopDrag);
 
+    document.addEventListener("touchmove", moveTouch, { passive: false });
+    document.addEventListener("touchend", stopDrag);
+    document.addEventListener("touchcancel", stopDrag);
+
     return () => {
-      document.removeEventListener("mousemove", moveSlider);
+      document.removeEventListener("mousemove", moveMouse);
       document.removeEventListener("mouseup", stopDrag);
-      if (dragAnimationRef.current) cancelAnimationFrame(dragAnimationRef.current);
+
+      document.removeEventListener("touchmove", moveTouch);
+      document.removeEventListener("touchend", stopDrag);
+      document.removeEventListener("touchcancel", stopDrag);
     };
   }, [isDragging]);
 
-  // Optional: handle window resize so if container moves/changes we keep consistent
-  useEffect(() => {
-    function handleResize() {
-      // small no-op — we don't store dimensions; moveSlider reads rect on every move.
-      // But you could re-calc sliderPosition if you store pixel values.
-      // Keeping this here in case you want to add responsive logic later.
-    }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Add / remove a CSS class to disable transitions while dragging
   const containerClass = `before-after-container${isDragging ? " dragging" : ""}`;
 
   return (
-    <div
-      className={containerClass}
-      ref={containerRef}
-      // support simple in-container start/stop as well
-      onMouseDown={(e) => {
-        // If user clicked the handle or anywhere in container - start dragging
-        // We'll keep dragging true, document listeners handle move + stop
-        setIsDragging(true);
-      }}
-      // optional: handleMouseLeave could stop dragging if desired
-    >
-      {/* BEFORE IMAGE: width grows with sliderPosition */}
+    <div className={containerClass} ref={containerRef}>
       <img
         className="before-img"
         src={spring}
@@ -92,7 +79,6 @@ dragAnimationRef.current = requestAnimationFrame(() => {
         draggable={false}
       />
 
-      {/* AFTER IMAGE: anchored to right; width is remaining percentage */}
       <img
         className="after-img"
         src={fall}
@@ -101,19 +87,42 @@ dragAnimationRef.current = requestAnimationFrame(() => {
         draggable={false}
       />
 
-      {/* Handle; its left is the percent */}
       <div className="slider-handle" style={{ left: `${sliderPosition}%` }}>
         <div
           className="slider-line"
-          style={{ width: sliderPosition === 0 ? "0px" : "3px" }}
+          style={{ width: sliderPosition === 0 ? "0px" : "2px" }}
         />
+
         <div
           className="handle"
+          tabIndex="0"
           onMouseDown={(e) => {
-            // prevent text/image selection while dragging
             e.preventDefault();
+              e.currentTarget.focus();
             setIsDragging(true);
           }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+              e.currentTarget.focus();
+            setIsDragging(true);
+          }}
+        onKeyDown={(e) => {
+  containerRef.current.classList.add("keyboard-active");
+
+  if (e.key === "ArrowLeft") {
+    setSliderPosition(prev => Math.max(0, prev - 2));
+  }
+  if (e.key === "ArrowRight") {
+    setSliderPosition(prev => Math.min(100, prev + 2));
+  }
+
+  // remove after tiny delay
+  clearTimeout(containerRef.current._keyTimer);
+  containerRef.current._keyTimer = setTimeout(() => {
+    containerRef.current.classList.remove("keyboard-active");
+  }, 100);
+}}
+
         />
       </div>
     </div>

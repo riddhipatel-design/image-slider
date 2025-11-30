@@ -1,10 +1,19 @@
 .before-after-container {
-  width: 600px;
-  height: 400px;
+  width: min(90%, 650px);   /* responsive width, max 800px */
+  height: 500px;            /* taller container */
   position: relative;
-  margin: 20px auto;
+  margin: 40px auto;
+
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 12px;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 /* Left image (grows as handle moves right) */
 .before-img {
@@ -14,7 +23,7 @@
   height: 100%;
   object-fit: cover;
   z-index: 2;
-  transition: width 0.2s ease;
+  transition: none;
 }
 
 /* Right image (shrinks as handle moves right) */
@@ -25,7 +34,7 @@
   height: 100%;
   object-fit: cover;
   z-index: 1;
-  transition: width 0.2s ease;
+   transition: none;
 }
 
 .slider-handle {
@@ -58,16 +67,52 @@
   z-index: 4;
   pointer-events: all;
 }
-/* existing rules you had... */
+
+.slider-line {
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  position: relative;
+  z-index: 2;
+}
+
+/* HANDLE CIRCLE — UPDATED */
+.handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: grab;
+    outline: none;
+  /* subtle default shadow */
+  box-shadow: 0 0 0 3px #7d1863;
+  z-index: 4;
+}
+
+/* ⭐ Color Ring on Hover: 2-color glow ⭐ */
+.handle:hover,
+.handle:focus,
+.handle:focus-visible {
+    background-color: #efeeee;
+      box-shadow: 0 0 0 3px #7d1863, 0 0 0 5px #efeeee, 0 0 0 8px #7d1863;
+          outline: none;
+}
+
+.handle:active {
+  transform: translate(-50%, -50%); /* no scale */
+    background-color: #efeeee;
+      box-shadow: 0 0 0 3px #7d1863, 0 0 0 5px #efeeee, 0 0 0 8px #7d1863;
+          outline: none;
+}
+
 
 .before-after-container.dragging .before-img,
 .before-after-container.dragging .after-img {
   transition: none !important; /* images update instantly while dragging */
 }
 
-/* you can keep a smooth transition when not dragging:
-.before-img,
-.after-img {
-  transition: width 0.18s ease;
-}
-*/
+

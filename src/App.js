@@ -5,10 +5,10 @@ import BeforeAfterSlider from "./components/BeforeAfterSlider";
 function App() {
   return (
     <div>
-     <h1>Image Slider</h1>
+     <h1 style={{ textAlign: 'center', }}>Image Slider</h1>
       <ImageSlider />
 
-      <h2>Before / After</h2>
+      <h2 style={{ textAlign: 'center', }}>Before / After</h2>
       <BeforeAfterSlider />
     </div>
   );
