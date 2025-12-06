@@ -41,10 +41,14 @@ module.exports = {
   ],
 
   devServer: {
-    static: "./dist",
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
     hot: true,
     open: true,
     port: 3000,
-    historyApiFallback: true,
+    historyApiFallback: {
+      index: '/index.html'  
+    },
   },
 };
