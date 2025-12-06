@@ -1,13 +1,12 @@
 .before-after-container {
-  width: min(90%, 650px);   /* responsive width, max 800px */
-  height: 500px;            /* taller container */
+  width: min(90%, 650px);  /* responsive width, max 800px */
+  height: clamp(260px, 50vw, 500px);   /* taller container */
   position: relative;
   margin: 40px auto;
-
   background: #ffffff;
   padding: 14px;
   border-radius: 12px;
-   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -30,11 +29,12 @@
 .after-img {
   position: absolute;
   top: 0;
-  right: 0; /* anchor to right edge */
+  right: 0;
+  /* anchor to right edge */
   height: 100%;
   object-fit: cover;
   z-index: 1;
-   transition: none;
+  transition: none;
 }
 
 .slider-handle {
@@ -50,22 +50,6 @@
   background-color: #fff;
   position: relative;
   z-index: 2;
-}
-
-/* Handle circle */
-.handle {
-  position: absolute;     /* sit above the line */
-  top: 50%;               /* center vertically */
-  left: 50%;              /* center horizontally */
-  transform: translate(-50%, -50%); /* truly center on line */
-  width: 30px;
-  height: 30px;
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 4;
-  pointer-events: all;
 }
 
 .slider-line {
@@ -84,10 +68,11 @@
   width: 30px;
   height: 30px;
   background-color: white;
+  backdrop-filter: blur(4px);
   border: none;
   border-radius: 50%;
   cursor: grab;
-    outline: none;
+  outline: none;
   /* subtle default shadow */
   box-shadow: 0 0 0 3px #7d1863;
   z-index: 4;
@@ -97,22 +82,38 @@
 .handle:hover,
 .handle:focus,
 .handle:focus-visible {
-    background-color: #efeeee;
-      box-shadow: 0 0 0 3px #7d1863, 0 0 0 5px #efeeee, 0 0 0 8px #7d1863;
-          outline: none;
+  backdrop-filter: blur(4px);
+  background: #efeeee;
+  box-shadow: 0 0 0 3px #7d1863, 0 0 0 5px #efeeee, 0 0 0 8px #7d1863;
+  outline: none;
 }
 
 .handle:active {
-  transform: translate(-50%, -50%); /* no scale */
-    background-color: #efeeee;
-      box-shadow: 0 0 0 3px #7d1863, 0 0 0 5px #efeeee, 0 0 0 8px #7d1863;
-          outline: none;
+  transform: translate(-50%, -50%);
+  /* no scale */
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 3px #7d1863, 0 0 0 5px #efeeee, 0 0 0 8px #7d1863;
+  outline: none;
 }
 
 
 .before-after-container.dragging .before-img,
 .before-after-container.dragging .after-img {
-  transition: none !important; /* images update instantly while dragging */
+  transition: none !important;
+  /* images update instantly while dragging */
+}
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 

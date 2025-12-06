@@ -1,21 +1,46 @@
+# macOS + Windows junk
 .DS_Store
 thumbs.db
+
+# Sass caches
 *.scssc
 .sass-cache
+
+# Temp folders
 .tmp/*
-node_modules
+
+# Node dependencies (must ignore!)
+node_modules/
+
+# Bower (old package manager)
 bower_components
+
+# Project-specific dependencies folders
 */dependencies
-/publish
-/build
+
+# Build output (CRA / Vite / Next - adjust based on your project)
+build/
+dist/
+publish/
+
+# Test assets
 /test/assets/img/manu*
 /test/dependencies
 /test/vendor/*
+
+# IDE/project files
 *.komodoproject
-.vscode
+.vscode/
 .sublime-project
 .sublime-workspace
-.vscode/
-.serverless/
-.env
 .code-workspace
+
+# Serverless
+.serverless/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test

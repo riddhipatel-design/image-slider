@@ -1,0 +1,33 @@
+.wrapper {
+  width: 100%;
+  max-width: 900px;
+  padding: 2rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 18px;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: 0.2s;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background: #eaeaea;
+}
+
+.nav-link.active {
+  color: rgb(46, 12, 168);
+}
+

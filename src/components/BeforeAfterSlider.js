@@ -1,29 +1,34 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./BeforeAfterSlider.css";
-import spring from "../assets/spring.jpg";
-import fall from "../assets/fall.jpg";
+import sunBlue from "../assets/sun_blue.jpg";
+import sunPink from "../assets/sun_pink.jpg";
 
 export default function BeforeAfterSlider() {
   const containerRef = useRef(null);
-  const dragAnimationRef = useRef(null); // rafRef is a React ref that stores a value which does not reset on re-render.
+  const dragAnimationRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [sliderPosition, setSliderPosition] = useState(50); // percentage 0..100
+  const [sliderPosition, setSliderPosition] = useState(50); // 0–100
+
+  // Live region text
+  const [announcement, setAnnouncement] = useState("");
+
+  // announce % to screen readers
+  useEffect(() => {
+    setAnnouncement(`Slider at ${Math.round(sliderPosition)} percent`);
+  }, [sliderPosition]);
 
   // Clean up RAF on unmount
   useEffect(() => {
     return () => {
-      if (dragAnimationRef.current) {
-        cancelAnimationFrame(dragAnimationRef.current);
-      }
+      if (dragAnimationRef.current) cancelAnimationFrame(dragAnimationRef.current);
     };
   }, []);
 
-  // Mouse move handler attached to document for robust dragging
+  // Drag logic
   useEffect(() => {
     function updatePosition(clientX) {
       const rect = containerRef.current.getBoundingClientRect();
       const relativeX = clientX - rect.left;
-
       let percent = (relativeX / rect.width) * 100;
       percent = Math.max(0, Math.min(100, percent));
 
@@ -36,18 +41,15 @@ export default function BeforeAfterSlider() {
     }
 
     function moveMouse(e) {
-      if (!isDragging) return;
-      updatePosition(e.clientX);
+      if (isDragging) updatePosition(e.clientX);
     }
 
     function moveTouch(e) {
-      if (!isDragging) return;
-      updatePosition(e.touches[0].clientX);
+      if (isDragging) updatePosition(e.touches[0].clientX);
     }
 
     function stopDrag() {
-      if (!isDragging) return;
-      setIsDragging(false);
+      if (isDragging) setIsDragging(false);
     }
 
     document.addEventListener("mousemove", moveMouse);
@@ -67,63 +69,77 @@ export default function BeforeAfterSlider() {
     };
   }, [isDragging]);
 
-  const containerClass = `before-after-container${isDragging ? " dragging" : ""}`;
-
   return (
-    <div className={containerClass} ref={containerRef}>
+    <div
+      className={`before-after-container${isDragging ? " dragging" : ""}`}
+      ref={containerRef}
+      aria-label="Before and after comparison slider"
+    >
+      {/* Screen reader image labels */}
+      <span className="sr-only">Before image on the left</span>
+      <span className="sr-only">After image on the right</span>
+
       <img
         className="before-img"
-        src={spring}
-        alt="before"
+        src={sunBlue}
+        alt="Before comparison"
         style={{ width: `${sliderPosition}%` }}
         draggable={false}
       />
 
       <img
         className="after-img"
-        src={fall}
-        alt="after"
+        src={sunPink}
+        alt="After comparison"
         style={{ width: `${100 - sliderPosition}%` }}
         draggable={false}
       />
 
+      {/* Slider handle */}
       <div className="slider-handle" style={{ left: `${sliderPosition}%` }}>
         <div
           className="slider-line"
+          aria-hidden="true"
           style={{ width: sliderPosition === 0 ? "0px" : "2px" }}
         />
 
         <div
           className="handle"
+          role="slider"
+          aria-label="Comparison slider handle"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={Math.round(sliderPosition)}
+          aria-valuetext={`${Math.round(sliderPosition)} percent`}
           tabIndex="0"
           onMouseDown={(e) => {
             e.preventDefault();
-              e.currentTarget.focus();
             setIsDragging(true);
           }}
           onTouchStart={(e) => {
             e.preventDefault();
-              e.currentTarget.focus();
             setIsDragging(true);
           }}
-        onKeyDown={(e) => {
-  containerRef.current.classList.add("keyboard-active");
+          onKeyDown={(e) => {
+            const step = 2;
 
-  if (e.key === "ArrowLeft") {
-    setSliderPosition(prev => Math.max(0, prev - 2));
-  }
-  if (e.key === "ArrowRight") {
-    setSliderPosition(prev => Math.min(100, prev + 2));
-  }
+            if (e.key === "ArrowLeft") {
+              setSliderPosition((prev) => Math.max(0, prev - step));
+            }
+            if (e.key === "ArrowRight") {
+              setSliderPosition((prev) => Math.min(100, prev + step));
+            }
+            if (e.key === "Home") setSliderPosition(0);
+            if (e.key === "End") setSliderPosition(100);
+          }}
+        >
+          <span className="sr-only">Drag to reveal before or after</span>
+        </div>
+      </div>
 
-  // remove after tiny delay
-  clearTimeout(containerRef.current._keyTimer);
-  containerRef.current._keyTimer = setTimeout(() => {
-    containerRef.current.classList.remove("keyboard-active");
-  }, 100);
-}}
-
-        />
+      {/* Live region for screen readers */}
+      <div className="sr-only" aria-live="polite">
+        {announcement}
       </div>
     </div>
   );
