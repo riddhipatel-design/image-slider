@@ -36,17 +36,17 @@ module.exports = {
   },
 
   plugins: [
+    // Generates dist/index.html
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
-  ],
 
-   plugins: [
+    // Copies _redirects to dist/
     new CopyWebpackPlugin({
       patterns: [
         { from: "public/_redirects", to: "" }
-      ]
-    })
+      ],
+    }),
   ],
 
   devServer: {
@@ -57,7 +57,7 @@ module.exports = {
     open: true,
     port: 3000,
     historyApiFallback: {
-      index: '/index.html'  
+      index: "/index.html",
     },
   },
 };
